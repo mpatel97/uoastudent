@@ -19,39 +19,24 @@
             <h1>Testing</h1>
 
             <h2>Subjects</h2>
-            <div class="jumbotron">
-                <button onclick="getSubjects('A')">A</button>
-                <button onclick="getSubjects('B')">B</button>
-                <button onclick="getSubjects('C')">C</button>
-                <button onclick="getSubjects('D')">D</button>
-                <button onclick="getSubjects('E')">E</button>
-                <button onclick="getSubjects('F')">F</button>
-                <button onclick="getSubjects('G')">G</button>
-                <button onclick="getSubjects('H')">H</button>
-                <button onclick="getSubjects('I')">I</button>
-                <button onclick="getSubjects('J')">J</button>
-                <button onclick="getSubjects('K')">K</button>
-                <button onclick="getSubjects('L')">L</button>
-                <button onclick="getSubjects('M')">M</button>
-                <button onclick="getSubjects('N')">N</button>
-                <button onclick="getSubjects('O')">O</button>
-                <button onclick="getSubjects('P')">P</button>
-                <button onclick="getSubjects('Q')">Q</button>
-                <button onclick="getSubjects('R')">R</button>
-                <button onclick="getSubjects('S')">S</button>
-                <button onclick="getSubjects('T')">T</button>
-                <button onclick="getSubjects('U')">U</button>
-                <button onclick="getSubjects('V')">V</button>
-                <button onclick="getSubjects('W')">W</button>
-                <button onclick="getSubjects('X')">X</button>
-                <button onclick="getSubjects('Y')">Y</button>
-                <button onclick="getSubjects('Z')">Z</button>
+            <div class="jumbotron text-center" id="subjectList" >
+                <script>
+                    let content = "";
+                    [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"].forEach(char => {
+                        content += "<button onclick=\"getSubjects('"+ char +"')\" class='btn-default btn-sm'>"+ char + "</button>";
+                    });
+                    document.getElementById("subjectList").innerHTML = content;
+                </script>
             </div>
             <div class="row" id="showSubjects"></div>
             <hr/>
 
             <h2>Courses</h2>
             <div class="row" id="showCourses"></div>
+            <hr/>
+
+            <h2>Schedule</h2>
+            <table id="showSchedule"></table>
             <hr/>
             
         </div>
