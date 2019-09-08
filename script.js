@@ -11,19 +11,28 @@ function getSubjects(first){
 }
 
 function showSubjects(subjects, first){
-    let content = "";
+    let content = ``;
     const addRecord = (record) => {
         if (record.charAt(0).toUpperCase() === first){
-            content += "<div class='card'> <div class='card-header p-1' id='" + record + "'>"
-                    + "<h2 class='mb-0'> <button class='btn btn-link' type='button' data-toggle='collapse' data-target='#collapse"
-                    + record + "' aria-expanded='true' aria-controls='collapse" + record + "' onclick='getCourse(\""
-                    + record +"\")'>" + record +" - " + subjects[record] + "</button> </h2> </div>"
-                    + "<div id='collapse" + record + "' class='collapse' aria-labelledby='" + record + "' data-parent='#subject-accord'>"
-                    + "<div class='card-body'> <div class='accordion' id='" + record + "-accord'> </div> </div> </div> </div>";
+            content += `<div class="card"> 
+                            <div class="card-header p-1" id="${record}">
+                                <h2 class="mb-0"> 
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${record}" aria-expanded="true" aria-controls="collapse${record}" 
+                                        onclick="getCourse('${record}')"> 
+                                        ${record} - ${subjects[record]}
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapse${record}" class="collapse" aria-labelledby="${record}" data-parent="#subject-accord">
+                                <div class="card-body">
+                                    <div class="accordion" id="${record}-accord"> </div>
+                                </div>
+                            </div>
+                        </div>`;
         }
     }
     Object.keys(subjects).forEach(addRecord);
-    if (content == "") {
+    if (content == ``) {
         content = `<div class="card border"> <div class="card-header"> No course offered for this selection </div> </div>`;
     }
     document.getElementById("subject-accord").innerHTML = content;
@@ -48,18 +57,26 @@ function getCourse(subject) {
 }
 
 function showCourse(courses) {
-    let content = "";
+    let content = ``;
     const addRecord = (record) => {
-        content += "<div class='card'> <div class='card-header p-1' id='" + record.subject + record.catalogNbr + "'>"
-                + "<h2 class='mb-0'> <button class='btn btn-link' type='button' data-toggle='collapse' data-target='#collapse"
-                + record.subject + record.catalogNbr + "' aria-expanded='true' aria-controls='collapse" + record.subject + record.catalogNbr 
-                + "' onclick='getClasses(\"" + record.subject + "\",\"" + record.catalogNbr + "\")'>" 
-                + record.subject + " " +  record.catalogNbr + ": " + record.titleLong + "</button> </h2> </div>"
-                + "<div id='collapse" + record.subject + record.catalogNbr + "' class='collapse' aria-labelledby='" + record.subject + record.catalogNbr 
-                + "' data-parent='#" + record.subject + "-accord'>"
-                + "<div class='card-body'> <div class='row' id='" + record.subject + record.catalogNbr + "-classes'>"
-                + "<div class='col-3' id='" + record.subject + record.catalogNbr + "-comptype'> </div> <div class='col-9' id='" + record.subject + record.catalogNbr + "-compdetail'> </div>" //getSchedule here
-                + "</div> </div> </div> </div> </div>";
+        content += `<div class="card"> 
+                        <div class="card-header p-1" id="${record.subject}${record.catalogNbr}">
+                            <h2 class="mb-0"> 
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse${record.subject}${record.catalogNbr}"
+                                    aria-expanded="true" aria-controls="collapse${record.subject}${record.catalogNbr}" onclick="getClasses('${record.subject}', '${record.catalogNbr}')">
+                                ${record.subject} ${record.catalogNbr}: ${record.titleLong} 
+                                </button> 
+                            </h2>
+                        </div>
+                        <div id="collapse${record.subject}${record.catalogNbr}" class="collapse" aria-labelledby="${record.subject}${record.catalogNbr}" data-parent="#${record.subject}-accord">
+                            <div class="card-body">
+                                <div class="row" id="${record.subject}${record.catalogNbr}-classes">
+                                    <div class="col-3" id="${record.subject}${record.catalogNbr}-comptype"> </div>
+                                    <div class="col-9" id="${record.subject}${record.catalogNbr}-compdetail"> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
 
     }
     courses.forEach(addRecord);
@@ -68,9 +85,7 @@ function showCourse(courses) {
 
 // Classes
 function getClasses(subject, subjectNum){
-    const uri = "https://mpat-cors.herokuapp.com/" // Proxy
-                + "https://api.auckland.ac.nz/service/classes/v1/classes?year=2019&subject=" 
-                + subject + "&catalogNbr=" + subjectNum + "&size=20";
+    const uri = `https://mpat-cors.herokuapp.com/https://api.auckland.ac.nz/service/classes/v1/classes?year=2019&subject=${subject}&catalogNbr=${subjectNum}&size=20`;
     const xhr = new XMLHttpRequest();
     xhr.open("GET", uri, true);
     xhr.onload = () => {
@@ -95,28 +110,34 @@ function showClasses(data, subject, subjectNum){
         classes.add(x["component"])
     });
 
-    let accordContent = "<div class='accordion accordion-md' id='" + subject + subjectNum + "-components'>";
+    let content = `<div class="accordion accordion-md" id="${subject}${subjectNum}-components">`;
     
     classes.forEach(x => {
-        accordContent += "<div class='card'> <div class='card-header' id='" + subject + subjectNum + x + "-head' >" 
-                + "<h2 class='mb-0'> <button class='btn btn-link' type='button' data-toggle='collapse' data-target='#" + subject + subjectNum + x + "-body'"
-                + "aria-expanded='false' aria-controls='" + subject + subjectNum + x + "-body'>" + x + "</button> </h2> </div>"
-                + "<div id='" + subject + subjectNum + x + "-body' class='collapse' aria-labelledby='" + subject + subjectNum + x + "-head' data-parent='#" + subject + subjectNum + "-components'>"
-                + "<div class='card-body'>";
+        content += `<div class="card"> 
+                        <div class="card-header" id="${subject}${subjectNum}${x}-head" >
+                            <h2 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#${subject}${subjectNum}${x}-body"
+                                    aria-expanded="false" aria-controls="${subject}${subjectNum}${x}-body">
+                                    ${x}
+                                </button> 
+                            </h2>
+                        </div>
+                        <div id="${subject}${subjectNum}${x}-body" class="collapse" aria-labelledby="${subject}${subjectNum}${x}-head" data-parent="#${subject}${subjectNum}-components">
+                            <div class="card-body">`;
 
-        let navContent = "";
         data.forEach (subjectClass => {
             if (subjectClass.component == x) {
-                navContent += "<button id='" + subject + subjectNum + subjectClass.classNbr + "-tab' role='tab'" 
-                            + "aria-controls='" + subject + subjectNum + subjectClass.classNbr + "' aria-selected='false'"
-                            + "onclick='showDetails(\"" + subject + subjectNum + subjectClass.classNbr +"\")'>"
-                            + subjectClass.classSection + "-" + x + " (" + subjectClass.classNbr + ")</button>";
+                content += `<button id="${subject}${subjectNum}${subjectClass.classNbr}-tab" role="tab" aria-controls="${subject}${subjectNum}${subjectClass.classNbr}" 
+                                aria-selected="false" onclick="showDetails('${subject}${subjectNum}${subjectClass.classNbr}')">
+                                ${subjectClass.classSection}-${x} (${subjectClass.classNbr})
+                            </button>`;
             }
         });
-        accordContent += navContent + "</div> </div> </div> </div>";
+
+        content += `</div> </div> </div>`;
     });
-    accordContent += "</div>";
-    document.getElementById(subject + subjectNum + "-comptype").innerHTML = accordContent;
+    content += `</div>`;
+    document.getElementById(subject + subjectNum + "-comptype").innerHTML = content;
 
 }
 
@@ -127,31 +148,43 @@ function formatDate(dateString) {
 
 // Schedule
 function getSchedule(subjectClasses, subject, subjectNum){
-    let content = "<div class='tab-content' id='" + subject + subjectNum + "-tabContent'>";
+    let content = `<div class="tab-content" id="${subject}${subjectNum}-tabContent">`;
     subjectClasses.forEach( record => {
-        content += "<div class='tab-pane classDetails fade' id='" + subject +subjectNum + record.classNbr + "' role='tabpanel' aria-labelledby='"
-                + subject + subjectNum + record.classNbr + "-tab'>"
-                + "<table class='table table-striped'> <thead> <tr> <th scope='col'>Start/End Dates</th> "
-                + "<th scope='col'>Days</th> <th scope='col'>Times</th> <th scope='col'>Room</th> </tr> </thead>"
-                + "<tbody>";
+        content += `<div class="tab-pane classDetails fade" id="${subject}${subjectNum}${record.classNbr}" role="tabpanel" 
+                        aria-labelledby="${subject}${subjectNum}${record.classNbr}-tab">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Start/End Dates</th>
+                                    <th scope="col">Days</th>
+                                    <th scope="col">Times</th>
+                                    <th scope="col">Room</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
 
         record.meetingPatterns.forEach( meeting => {
             let startDate = formatDate(meeting.startDate);
             let endDate = formatDate(meeting.endDate);
-            content += "<tr> <td> " + startDate + " - " + endDate + "</td> <td>";
+            content += `<tr>
+                            <td>${startDate} - ${endDate}</td>
+                            <td>`;
                 
             if (meeting.daysOfWeek === "mon") { content += "Monday" }
             else if (meeting.daysOfWeek === "tue") { content += "Tuesday" }
             else if (meeting.daysOfWeek === "wed") { content += "Wednesday" }
             else if (meeting.daysOfWeek === "thu") { content += "Thursday" }
             else { content += "Friday" }
-            content += "</td> <td>" + meeting.startTime + " to " + meeting.endTime + "</td>"
-                            + "<td> " + meeting.location + "</td> </tr>";
+
+            content += `    </td>
+                            <td>${meeting.startTime} to ${meeting.endTime}</td>
+                            <td>${meeting.location}</td>
+                        </tr>`;
         });
                     
-        content += "</tbody> </table> </div>"
+        content += `</tbody> </table> </div>`;
     });
-    content += " </div>";
+    content += `</div>`;
     document.getElementById(subject + subjectNum + "-compdetail").innerHTML = content;
 }
 
